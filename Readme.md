@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Irina Tsypliaeva](https://up.htmlacademy.ru/javascript/16/user/388465).
-* Наставник: `Неизвестно`.
+* Наставник: `Наставника нет`.
 
 ---
 
