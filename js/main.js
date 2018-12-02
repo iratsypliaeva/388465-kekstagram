@@ -85,6 +85,8 @@ pictures.appendChild(fragment);
 // Popup
 //-------------------------------------------------------------------------------------
 var popup = null;
+var focusFlag = false;
+
 var openPopup = function (img) {
   img.classList.remove('hidden');
   popup = img;
@@ -92,6 +94,9 @@ var openPopup = function (img) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 var closePopup = function () {
+  if (focusFlag) {
+    return;
+  }
   popup.classList.add('hidden');
 
   document.removeEventListener('keydown', onPopupEscPress);
@@ -251,13 +256,69 @@ var setInitialPosition = function () {
   setIntensity(1);
 };
 
+/**
+ * 2.3. Хэш-теги:
+
+ хэш-теги необязательны;+
+ хэш-тег начинается с символа # (решётка);+
+ хеш-тег не может состоять только из одной решётки;+
+ хэш-теги разделяются пробелами;+
+ один и тот же хэш-тег не может быть использован дважды;+
+ нельзя указать больше пяти хэш-тегов;+
+ максимальная длина одного хэш-тега 20 символов, включая решётку;+
+ теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом.+
+ если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
+ */
+var textHashtags = document.querySelector('.text__hashtags');
+var imageUploadSubmitButton = document.querySelector('.img-upload__submit');
+
+var validateHashtags = function () {
+  console.log(textHashtags.value);
+  var arrTextHashtags = textHashtags.value.split(' ');
+  if (arrTextHashtags.length > 5) {
+    textHashtags.setCustomValidity('указано больше пяти хэш-тегов');
+    return;
+  }
+ var dict = {};
+  for (var i = 0; i < arrTextHashtags.length; i++ ) {
+      if (arrTextHashtags[i].length > 20) {
+        textHashtags.setCustomValidity('длина хэш-тега превышает 20 символов');
+        return;
+      }
+      if (arrTextHashtags[i].charAt(0) !== '#') {
+        textHashtags.setCustomValidity('хэштэг должен начинаться с #');
+        return;
+      }
+      if (arrTextHashtags[i].length <= 1) {
+      textHashtags.setCustomValidity('длина хэш-тега меньше 2 символов');
+      return;
+    }
+      if (arrTextHashtags[i].substring(1).indexOf('#') !== -1) {
+        textHashtags.setCustomValidity('хэш-теги должны разделяться пробелами');
+        return;
+      }
+      dict[arrTextHashtags[i].toLowerCase()] = 1;
+  }
+  var dictLen = Object.keys(dict).length;
+  if (dictLen !== arrTextHashtags.length) {
+    textHashtags.setCustomValidity('oдин и тот же хэш-тег был использован дважды');
+    return;
+  }
+  textHashtags.setCustomValidity('');
+};
+
+textHashtags.addEventListener('input', function () {
+  textHashtags.setCustomValidity('');
+});
+imageUploadSubmitButton.onclick = validateHashtags;
 
 
-
-
-
-
-
+textHashtags.onfocus = function () {
+  focusFlag = true;
+};
+ textHashtags.onblur = function () {
+   focusFlag = false;
+ };
 
 
 
