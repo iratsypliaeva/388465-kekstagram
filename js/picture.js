@@ -6,8 +6,7 @@
   window.pictures = {
     generateThumbnails: function (picturesArr) {
       var bigPictureElement = document.querySelector('.big-picture');
-      var picture = document.querySelector('#picture')
-        .content;
+      var picture = document.querySelector('#picture').content;
       var popup = window.popup.createPopup(bigPictureElement);
 
 

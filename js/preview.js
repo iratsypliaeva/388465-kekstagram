@@ -13,8 +13,8 @@
 
       for (var i = 0; i < picture.comments.length; i++) {
         bigPictureElement.querySelector('.social__comments').innerHTML += '<li class="social__comment">\n' +
-          '<img class="social__picture" src="img/avatar-' + window.utils.createRandomNumber(1, 6) + '.svg" alt="Аватар комментатора фотографии" width="35" height="35">\n' +
-          '<p class="social__text">' + picture.comments[i] + '</p>\n' +
+          '<img class="social__picture" src="' + picture.comments[i].avatar + '" alt="Аватар комментатора фотографии" width="35" height="35">\n' +
+          '<p class="social__text">' + picture.comments[i].message + '</p>\n' +
           '</li>';
       }
       bigPictureElement.querySelector('.social__caption').textContent = picture.description;

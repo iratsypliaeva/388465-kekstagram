@@ -7,13 +7,46 @@
   var uploadFile = document.querySelector('#upload-file');
   var uploadCancel = document.querySelector('#upload-cancel');
   var bigPictureUploadCancel = document.querySelector('.big-picture__cancel');
+  var imageUploadForm = document.querySelector('.img-upload__form');
+  var textDescription = document.querySelector('.text__description');
+  var success = document.querySelector('#success').content;
+  var main = document.querySelector('main');
+
 
   var popup = window.popup.createPopup(imageUploadOverlay);
 
 
   window.gallery = {
-    createGallery: function () {
 
+    createGallery: function () {
+      /*var successMessage = success.cloneNode(true);
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(successMessage);
+      main.appendChild(fragment);
+
+      var successPopup = window.popup.createPopup(document.querySelector(".success"));
+      successPopup.closePopup();
+
+      var successButton = document.querySelector('.success__button');
+      successButton.onclick = function () {
+        successPopup.openPopup();
+      };*/
+
+      imageUploadForm.onsubmit = function (evt) {
+        evt.preventDefault();
+
+        var formData = new FormData(imageUploadForm);
+        window.backend.sendData(formData, function () {
+          /*popup.closePopup();
+          textHashtags.value = '';
+          textDescription.value = '';
+          window.form.setEffect('none');
+          successPopup.openPopup();*/
+          alert("LOAD!");
+        }, function () {
+          alert("ERROR!");
+        });
+      };
 
       /**
        * 1.3. Выбор изображения для загрузки осуществляется с помощью стандартного контрола загрузки файла #upload-file,
