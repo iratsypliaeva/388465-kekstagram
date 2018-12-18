@@ -11,7 +11,7 @@
   var effectRadio = document.querySelectorAll('.effects__radio');
   var imageUploadPreview = document.querySelector('.img-upload__preview');
   var imageUploadEffectLevel = document.querySelector('.img-upload__effect-level');
-
+  var imageUploadEffectLevelPopup = window.popup.createPopup(imageUploadEffectLevel);
   var currentEffect = null;
 
 
@@ -22,7 +22,7 @@
     setIntensity(1);
   };
   var setIntensity = function (intensity) {
-    imageUploadEffectLevel.classList.remove('hidden');
+    imageUploadEffectLevelPopup.open();
     if (currentEffect === 'chrome') {
       imageUploadPreview.style.filter = 'grayscale(' + intensity + ')';
     } else if (currentEffect === 'sepia') {
@@ -35,9 +35,10 @@
       imageUploadPreview.style.filter = 'brightness(' + (1 + intensity * 2) + ')';
     } else {
       imageUploadPreview.style.filter = '';
-      imageUploadEffectLevel.classList.add('hidden');
+      imageUploadEffectLevelPopup.close();
     }
   };
+  
   var setEffect = function (effect) {
     if (effect !== currentEffect) {
       if (currentEffect) {
@@ -90,7 +91,7 @@
      При переключении эффектов, уровень насыщенности сбрасывается до начального значения (100%): слайдер, CSS-стиль изображения и значение поля должны обновляться.
      */
 
-    imageUploadEffectLevel.classList.add('hidden');
+    imageUploadEffectLevelPopup.close();
 
     for (var i = 0; i < effectRadio.length; i++) {
       effectRadio[i].onclick = function () {

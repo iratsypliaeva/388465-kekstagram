@@ -4,6 +4,7 @@
   // Popup
   // -------------------------------------------------------------------------------------
   var imageUploadOverlay = document.querySelector('.img-upload__overlay');
+  var imageUploadOverlayPopup = window.popup.createPopup(imageUploadOverlay);
   var uploadFile = document.querySelector('#upload-file');
   var uploadCancel = document.querySelector('#upload-cancel');
   var bigPictureUploadCancel = document.querySelector('.big-picture__cancel');
@@ -13,38 +14,41 @@
   var main = document.querySelector('main');
 
 
-  var popup = window.popup.createPopup(imageUploadOverlay);
-
 
   window.gallery = {
 
     createGallery: function () {
-      /*var successMessage = success.cloneNode(true);
+      //create success message
+      var successMessage = success.cloneNode(true);
       var fragment = document.createDocumentFragment();
       fragment.appendChild(successMessage);
       main.appendChild(fragment);
 
-      var successPopup = window.popup.createPopup(document.querySelector(".success"));
-      successPopup.closePopup();
+      var successPopup = window.popup.createPopup(document.querySelector('.success'));
+      successPopup.close();
 
       var successButton = document.querySelector('.success__button');
       successButton.onclick = function () {
-        successPopup.openPopup();
-      };*/
+        successPopup.close();
+      };
 
+      //on submit
       imageUploadForm.onsubmit = function (evt) {
         evt.preventDefault();
 
         var formData = new FormData(imageUploadForm);
         window.backend.sendData(formData, function () {
-          /*popup.closePopup();
+          imageUploadOverlayPopup.closePopup();
           textHashtags.value = '';
           textDescription.value = '';
           window.form.setEffect('none');
-          successPopup.openPopup();*/
-          alert("LOAD!");
+          successPopup.openPopup();
         }, function () {
-          alert("ERROR!");
+          imageUploadOverlayPopup.closePopup();
+          textHashtags.value = '';
+          textDescription.value = '';
+          window.form.setEffect('none');
+          successPopup.openPopup();
         });
       };
 
@@ -55,7 +59,7 @@
        */
 
       uploadFile.addEventListener('change', function () {
-        popup.openPopup();
+        imageUploadOverlayPopup.open();
       });
 
       /**
@@ -98,7 +102,7 @@
 
 
       uploadCancel.addEventListener('click', function () {
-        popup.closePopup();
+        imageUploadOverlayPopup.close();
       });
 
       /**
@@ -107,7 +111,7 @@
        на нажатие клавиши Enter так же, как и на клик.
        **/
       bigPictureUploadCancel.addEventListener('click', function () {
-        popup.closePopup();
+        imageUploadOverlayPopup.close();
       });
 
 
