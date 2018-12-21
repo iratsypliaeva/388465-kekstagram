@@ -4,7 +4,6 @@
   // Генерация маленьких картинок
   // -------------------------------------------------------------------------------------
   var generateThumbnails = function (picturesArr) {
-    var previewElement = document.querySelector('.big-picture');
     var picture = document.querySelector('#picture').content;
 
 
