@@ -14,11 +14,10 @@
   var main = document.querySelector('main');
 
 
-
   window.gallery = {
 
     createGallery: function () {
-      //create success message
+      // create success message
       var successMessage = success.cloneNode(true);
       var fragment = document.createDocumentFragment();
       fragment.appendChild(successMessage);
@@ -32,7 +31,7 @@
         successPopup.close();
       };
 
-      //on submit
+      // on submit
       imageUploadForm.onsubmit = function (evt) {
         evt.preventDefault();
 
@@ -116,17 +115,7 @@
 
 
       /**
-       * 2.3. Хэш-теги:
-
-       хэш-теги необязательны;+
-       хэш-тег начинается с символа # (решётка);+
-       хеш-тег не может состоять только из одной решётки;+
-       хэш-теги разделяются пробелами;+
-       один и тот же хэш-тег не может быть использован дважды;+
-       нельзя указать больше пяти хэш-тегов;+
-       максимальная длина одного хэш-тега 20 символов, включая решётку;+
-       теги нечувствительны к регистру: #ХэшТег и #хэштег считаются одним и тем же тегом.+
-       если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
+       * 2.3. Хэш-теги
        */
       var textHashtags = document.querySelector('.text__hashtags');
       var imageUploadSubmitButton = document.querySelector('.img-upload__submit');
