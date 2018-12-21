@@ -1,9 +1,5 @@
 'use strict';
 
-var onError = function (error) {
-  console.log(error);
-};
-
 var onLoad = function (picturesArr) {
   window.picturesArr = picturesArr;
   window.pictures.generateThumbnails(picturesArr);
@@ -12,6 +8,6 @@ var onLoad = function (picturesArr) {
   window.gallery.createGallery();
   window.form.createNewImageForm();
 };
-window.backend.receiveData(onLoad, onError);
+window.backend.receiveData(onLoad);
 
 
