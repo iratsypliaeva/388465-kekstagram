@@ -8,6 +8,6 @@ var onLoad = function (picturesArr) {
   window.gallery.createGallery();
   window.form.createNewImageForm();
 };
-window.backend.receiveData(onLoad, function () {});
+window.backend.receiveData(onLoad);
 
 
