@@ -60,16 +60,24 @@
       xhr.responseType = 'json';
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
-          onLoad(xhr.response);
+          if (onLoad) {
+            onLoad(xhr.response);
+          }
         } else {
-          onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+          if (onError) {
+            onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+          }
         }
       });
       xhr.addEventListener('error', function () {
-        onError('Произошла ошибка соединения');
+        if (onError) {
+          onError('Произошла ошибка соединения');
+        }
       });
       xhr.addEventListener('timeout', function () {
-        onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+        if (onError) {
+          onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+        }
       });
 
       xhr.timeout = 10000; // 10s
