@@ -1,7 +1,7 @@
 'use strict';
 
 var onError = function (error) {
-  alert(error);
+  console.log(error);
 };
 
 var onLoad = function (picturesArr) {
