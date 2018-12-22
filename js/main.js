@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var onLoad = function (picturesArr) {
     window.picturesArr = picturesArr;
@@ -10,5 +11,3 @@
   };
   window.backend.receiveData(onLoad, function () {});
 })();
-
-
