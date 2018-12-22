@@ -2,20 +2,26 @@
 
 (function () {
   var lastTimeout;
-  var showFilters = function () {
-    var imgFilters = document.querySelector('.img-filters');
-    imgFilters.classList.remove('img-filters--inactive');
-  };
   var popularFilterButton = document.querySelector('#filter-popular');
   var newFilterButton = document.querySelector('#filter-new');
   var discussedFilterButton = document.querySelector('#filter-discussed');
 
+  var showFilters = function () {
+    var imgFilters = document.querySelector('.img-filters');
+    imgFilters.classList.remove('img-filters--inactive');
+  };
+
+  var processButton = function (btn) {
+    popularFilterButton.classList.remove('img-filters__button--active');
+    newFilterButton.classList.remove('img-filters__button--active');
+    discussedFilterButton.classList.remove('img-filters__button--active');
+    btn.classList.add('img-filters__button--active');
+  };
+
   var createFiltersCallbacks = function (picturesArr) {
 
     popularFilterButton.addEventListener('click', window.debounce(function () {
-      newFilterButton.classList.remove('img-filters__button--active');
-      discussedFilterButton.classList.remove('img-filters__button--active');
-      popularFilterButton.classList.add('img-filters__button--active');
+      processButton(popularFilterButton);
       var popularImgArr = picturesArr.slice();
       window.pictures.deleteThumbnails();
       if (lastTimeout) {
@@ -25,9 +31,7 @@
     }));
 
     newFilterButton.addEventListener('click', window.debounce(function () {
-      popularFilterButton.classList.remove('img-filters__button--active');
-      discussedFilterButton.classList.remove('img-filters__button--active');
-      newFilterButton.classList.add('img-filters__button--active');
+      processButton(newFilterButton);
       var newImgArr = window.data.createPicturesArr().slice(0, 10);
       window.pictures.deleteThumbnails();
       if (lastTimeout) {
@@ -37,9 +41,7 @@
     }));
 
     discussedFilterButton.addEventListener('click', window.debounce(function () {
-      popularFilterButton.classList.remove('img-filters__button--active');
-      newFilterButton.classList.remove('img-filters__button--active');
-      discussedFilterButton.classList.add('img-filters__button--active');
+      processButton(discussedFilterButton);
       var copyArr = picturesArr.slice();
       var comparePict = function (a, b) {
         if (a.comments.length < b.comments.length) {
