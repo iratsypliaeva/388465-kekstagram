@@ -16,7 +16,7 @@
   var scaleControlSmaller = document.querySelector('.scale__control--smaller');
   var scaleControlBigger = document.querySelector('.scale__control--bigger');
   var scaleControlValue = document.querySelector('.scale__control--value');
-  var imageUploadScale = document.querySelector('.img-upload__scale');
+  var EFFECT_LEVEL_STEP = 25;
   /**
    *
 
@@ -32,6 +32,7 @@
 
   var setInitialPosition = function () {
     scaleControlValue.value = 100 + '%';
+    imageUploadPreview.style.transform = 'scale(1)';
     effectLevelPin.style.left = '100%';
     effectLevelValue.value = 100;
     effectLevelDepth.style.width = '100%';
@@ -40,22 +41,15 @@
 
 
   scaleControlSmaller.addEventListener('click', function () {
-    if (parseInt(scaleControlValue.value, 10) !== 25) {
-      scaleControlValue.value = parseInt(scaleControlValue.value, 10) - 25 + '%';
-      effectLevelValue.value = effectLevelValue.value - 25;
-      effectLevelDepth.style.width = parseInt(effectLevelDepth.style.width, 10) - 25 + '%';
-      effectLevelPin.style.left = parseInt(effectLevelPin.style.left, 10) - 25 + '%';
-      setIntensity(parseInt(scaleControlValue.value, 10) / 100);
-
+    if (parseInt(scaleControlValue.value, 10) !== EFFECT_LEVEL_STEP) {
+      scaleControlValue.value = parseInt(scaleControlValue.value, 10) - EFFECT_LEVEL_STEP + '%';
+      imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
     }
   });
   scaleControlBigger.addEventListener('click', function () {
     if (parseInt(scaleControlValue.value, 10) !== 100) {
-      scaleControlValue.value = parseInt(scaleControlValue.value, 10) + 25 + '%';
-      effectLevelValue.value = effectLevelValue.value + 25;
-      effectLevelDepth.style.width = parseInt(effectLevelDepth.style.width, 10) + 25 + '%';
-      effectLevelPin.style.left = parseInt(effectLevelPin.style.left, 10) + 25 + '%';
-      setIntensity(parseInt(scaleControlValue.value, 10) / 100);
+      scaleControlValue.value = parseInt(scaleControlValue.value, 10) + EFFECT_LEVEL_STEP + '%';
+      imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
     }
   });
 
@@ -84,10 +78,8 @@
       currentEffect = effect;
       setInitialPosition();
       if (currentEffect === 'none') {
-        imageUploadScale.classList.add('hidden');
         imageUploadEffectLevelPopup.close();
       } else {
-        imageUploadScale.classList.remove('hidden');
         imageUploadEffectLevelPopup.open();
       }
     }
