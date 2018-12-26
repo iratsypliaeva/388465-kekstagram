@@ -15,6 +15,10 @@
       document.removeEventListener('keydown', onPopupEscPress);
     };
 
+    var getNode = function () {
+      return node;
+    };
+
     var onPopupEscPress = function (evt) {
       if (evt.keyCode === window.utils.keyCodes.ESC_KEYCODE) {
         close();
@@ -23,7 +27,8 @@
 
     return {
       open: open,
-      close: close
+      close: close,
+      getNode: getNode
     };
   };
 

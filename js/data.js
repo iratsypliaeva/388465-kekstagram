@@ -11,6 +11,10 @@
     'Отдыхаем...', 'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
     'Вот это тачка!'];
 
+  var NUM_PHOTOS = 25;
+  var NUM_LIKES_MIN = 15;
+  var NUM_LIKES_MAX = 200;
+
   // -------------------------------------------------------------------------------------
   // Генерация данных
   // -------------------------------------------------------------------------------------
@@ -19,8 +23,8 @@
     createPicturesArr: function () {
       // создание массива ссылок
       var urlPictures = [];
-      for (var i = 1; i <= 25; i++) {
-        var urlAddress = 'photos/' + window.utils.createRandomNumber(1, 25) + '.jpg';
+      for (var i = 1; i <= NUM_PHOTOS; i++) {
+        var urlAddress = 'photos/' + window.utils.createRandomNumber(1, NUM_PHOTOS) + '.jpg';
         if (urlPictures.includes(urlAddress) === false) {
           urlPictures.push(urlAddress);
         } else {
@@ -29,10 +33,10 @@
       }
       var picturesArr = [];
 
-      for (var ind = 0; ind < 25; ind++) {
+      for (var ind = 0; ind < NUM_PHOTOS; ind++) {
         picturesArr.push({
           url: urlPictures[ind],
-          likes: window.utils.createRandomNumber(15, 200),
+          likes: window.utils.createRandomNumber(NUM_LIKES_MIN, NUM_LIKES_MAX),
           comments: window.utils.createRandomNumber(1, 2) === 1 ? [window.utils.randomValue(COMMENTS)] : [window.utils.randomValue(COMMENTS), window.utils.randomValue(COMMENTS)],
           description: window.utils.randomValue(DESCRIPTION)
         });
