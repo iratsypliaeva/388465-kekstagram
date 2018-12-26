@@ -1,14 +1,11 @@
 'use strict';
+
 (function () {
-  /**
-   * 1.4. Закрытие формы редактирования изображения производится либо нажатием на кнопку .upload-cancel,
-   * либо нажатием клавиши Esc.
-   */
-  /**
-   * 2.3. Хэш-теги
-   */
   var textHashtags = document.querySelector('.text__hashtags');
   var imageUploadSubmitButton = document.querySelector('.img-upload__submit');
+  var HASHTAG_LENGTH_MAX = 5;
+  var HASHTAG_NUM_MAX = 20;
+
 
   var validateHashtags = function () {
     if (textHashtags.value === '') {
@@ -16,13 +13,13 @@
       return;
     }
     var arrTextHashtags = textHashtags.value.split(' ');
-    if (arrTextHashtags.length > 5) {
+    if (arrTextHashtags.length > HASHTAG_LENGTH_MAX) {
       textHashtags.setCustomValidity('указано больше пяти хэш-тегов');
       return;
     }
     var dict = {};
     for (var i = 0; i < arrTextHashtags.length; i++) {
-      if (arrTextHashtags[i].length > 20) {
+      if (arrTextHashtags[i].length > HASHTAG_NUM_MAX) {
         textHashtags.setCustomValidity('длина хэш-тега превышает 20 символов');
         return;
       }

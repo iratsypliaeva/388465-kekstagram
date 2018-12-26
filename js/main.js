@@ -6,8 +6,7 @@
     window.pictures.generateThumbnails(picturesArr);
     window.filters.showFilters();
     window.filters.createFiltersCallbacks(picturesArr);
-    window.gallery.createGallery();
-    window.form.createNewImageForm();
+    window.upload.createForm();
   };
   window.backend.receiveData(onLoad, function () {});
 })();
