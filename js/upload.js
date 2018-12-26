@@ -17,7 +17,6 @@
   var main = document.querySelector('main');
   var imageUploadOverlayImg = document.querySelector('.img-upload__overlay').querySelector('img');
 
-  var effectLevelValue = document.querySelector('.effect-level__value');
   var effectLevelPin = imageUploadOverlay.querySelector('.effect-level__pin');
   var effectLevelLine = imageUploadOverlay.querySelector('.effect-level__line');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
