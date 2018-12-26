@@ -1,9 +1,22 @@
 'use strict';
+
 (function () {
   // -------------------------------------------------------------------------------------
-  // Перемещение слайдера
+  // Popup
   // -------------------------------------------------------------------------------------
   var imageUploadOverlay = document.querySelector('.img-upload__overlay');
+  var imageUploadOverlayPopup = window.popup.createPopup(imageUploadOverlay);
+  var uploadFile = document.querySelector('#upload-file');
+  var uploadCancel = document.querySelector('#upload-cancel');
+  var bigPictureUploadCancel = document.querySelector('.big-picture__cancel');
+  var imageUploadForm = document.querySelector('.img-upload__form');
+  var textDescription = document.querySelector('.text__description');
+  var textHashtags = document.querySelector('.text__hashtags');
+  var success = document.querySelector('#success').content;
+  var error = document.querySelector('#error').content;
+  var main = document.querySelector('main');
+  var imageUploadOverlayImg = document.querySelector('.img-upload__overlay').querySelector('img');
+
   var effectLevelValue = document.querySelector('.effect-level__value');
   var effectLevelPin = imageUploadOverlay.querySelector('.effect-level__pin');
   var effectLevelLine = imageUploadOverlay.querySelector('.effect-level__line');
@@ -16,42 +29,23 @@
   var scaleControlSmaller = document.querySelector('.scale__control--smaller');
   var scaleControlBigger = document.querySelector('.scale__control--bigger');
   var scaleControlValue = document.querySelector('.scale__control--value');
+
   var EFFECT_LEVEL_STEP = 25;
-  /**
-   *
 
-   При изменении значения поля .scale__control--value
-   изображению .img-upload__preview должен добавляться соответствующий стиль CSS,
-   который с помощью трансформации effect-level задаёт масштаб.
-   Например, если в поле стоит значение 75%, то в стиле изображения
-   должно быть написано transform: scale(0.75).
-
-
-   * **/
-
+  // clear form
+  var clearForm = function () {
+    textHashtags.value = '';
+    textDescription.value = '';
+    setEffect('none');
+    scaleControlValue.value = '100%';
+    imageUploadPreview.style.transform = 'scale(1.0)';
+  };
 
   var setInitialPosition = function () {
-    scaleControlValue.value = 100 + '%';
-    imageUploadPreview.style.transform = 'scale(1)';
     effectLevelPin.style.left = '100%';
-    effectLevelValue.value = 100;
     effectLevelDepth.style.width = '100%';
     setIntensity(1);
   };
-
-
-  scaleControlSmaller.addEventListener('click', function () {
-    if (parseInt(scaleControlValue.value, 10) !== EFFECT_LEVEL_STEP) {
-      scaleControlValue.value = parseInt(scaleControlValue.value, 10) - EFFECT_LEVEL_STEP + '%';
-      imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
-    }
-  });
-  scaleControlBigger.addEventListener('click', function () {
-    if (parseInt(scaleControlValue.value, 10) !== 100) {
-      scaleControlValue.value = parseInt(scaleControlValue.value, 10) + EFFECT_LEVEL_STEP + '%';
-      imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
-    }
-  });
 
   var setIntensity = function (intensity) {
     if (currentEffect === 'chrome') {
@@ -85,8 +79,22 @@
     }
   };
 
-  var createNewImageForm = function () {
+  var createForm = function () {
+    window.hashtags.initHashtags();
     setEffect('none');
+
+    scaleControlSmaller.addEventListener('click', function () {
+      if (parseInt(scaleControlValue.value, 10) !== EFFECT_LEVEL_STEP) {
+        scaleControlValue.value = parseInt(scaleControlValue.value, 10) - EFFECT_LEVEL_STEP + '%';
+        imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
+      }
+    });
+    scaleControlBigger.addEventListener('click', function () {
+      if (parseInt(scaleControlValue.value, 10) !== 100) {
+        scaleControlValue.value = parseInt(scaleControlValue.value, 10) + EFFECT_LEVEL_STEP + '%';
+        imageUploadPreview.style.transform = 'scale(' + parseInt(scaleControlValue.value, 10) / 100 + ')';
+      }
+    });
 
     for (var i = 0; i < effectRadio.length; i++) {
       effectRadio[i].onclick = function () {
@@ -115,8 +123,6 @@
         effectLevelDepth.style.width = effectLevelPin.style.left;
 
         var intensity = (effectLevelPin.offsetLeft + effectLevelPin.offsetWidth / 2) / effectLevelLine.offsetWidth;
-
-        effectLevelValue.value = intensity * 100;
         setIntensity(intensity);
       };
 
@@ -142,10 +148,91 @@
     };
 
     effectLevelLine.addEventListener('mousedown', startPinDrag);
+
+    // create success message
+    var successMessage = success.cloneNode(true);
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(successMessage);
+    main.appendChild(fragment);
+
+    // success popup
+    var successPopup = window.popup.createPopup(document.querySelector('.success'));
+    successPopup.close();
+    successPopup.getNode().onclick = function () {
+      successPopup.close();
+    };
+    document.querySelector('.success__inner').onclick = function (evt) {
+      evt.stopPropagation();
+    };
+    document.querySelector('.success__button').onclick = function () {
+      successPopup.close();
+    };
+
+    // create error message
+    var errorMessage = error.cloneNode(true);
+    fragment = document.createDocumentFragment();
+    fragment.appendChild(errorMessage);
+    main.appendChild(fragment);
+
+    // error popup
+    var errorPopup = window.popup.createPopup(document.querySelector('.error'));
+    errorPopup.close();
+    errorPopup.getNode().onclick = function () {
+      errorPopup.close();
+    };
+    document.querySelector('.error__inner').onclick = function (evt) {
+      evt.stopPropagation();
+    };
+    document.querySelector('.error__button').onclick = function () {
+      errorPopup.close();
+    };
+
+    // on submit
+    imageUploadForm.onsubmit = function (evt) {
+      evt.preventDefault();
+
+      var formData = new FormData(imageUploadForm);
+      window.backend.sendData(formData, function () {
+        successPopup.open();
+        clearForm();
+        imageUploadOverlayPopup.close();
+      }, function () {
+        errorPopup.open();
+        clearForm();
+        imageUploadOverlayPopup.close();
+      });
+    };
+
+    // file loading
+    var handleFileSelect = function (onLoad) {
+      var file = uploadFile.files[0];
+      var fr = new FileReader();
+      fr.onload = function () {
+        onLoad(fr.result);
+      };
+      fr.readAsDataURL(file);
+    };
+
+    uploadFile.addEventListener('change', function () {
+      handleFileSelect(function (data) {
+        imageUploadOverlayImg.setAttribute('src', data);
+        // clear and open
+        clearForm();
+        imageUploadOverlayPopup.open();
+      });
+    });
+
+    //
+    uploadCancel.addEventListener('click', function () {
+      imageUploadOverlayPopup.close();
+    });
+
+    bigPictureUploadCancel.addEventListener('click', function () {
+      imageUploadOverlayPopup.close();
+    });
   };
 
-  window.form = {
-    createNewImageForm: createNewImageForm,
-    setEffect: setEffect
+  window.upload = {
+    createForm: createForm
   };
 })();
